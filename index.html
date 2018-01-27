@@ -1,0 +1,189 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0" name="viewport">
+<title>消滅都市ランクアップスクリーンショット@jun_etc</title>
+<script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="js/tada.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div style="margin-top:0px">
+  <div style="float:left">
+    <a href="./">top</a>
+  </div>
+  <div style="text-align: right;">
+    <a href="readme.html">readme</a>
+  </div>
+</div>
+
+<hr />
+
+<div id="num-list">
+  <div id="593" style="margin-top:5px">
+    <a href="?r=593" class="link">593-600</a>
+  </div>
+  <div id="601" style="margin-top:5px">
+    <a href="?r=601" class="link">601-620</a>&nbsp;
+    <a href="?r=621" class="link">621-640</a>&nbsp;
+    <a href="?r=641" class="link">641-660</a>&nbsp;
+    <a href="?r=661" class="link">661-680</a>&nbsp;
+    <a href="?r=681" class="link">681-700</a>
+  </div>
+  <div id="701" style="margin-top:5px">
+    <a href="?r=701" class="link">701-720</a>&nbsp;
+    <a href="?r=721" class="link">721-740</a>&nbsp;
+    <a href="?r=741" class="link">741-760</a>&nbsp;
+    <a href="?r=761" class="link">761-780</a>&nbsp;
+    <a href="?r=781" class="link">781-800</a>
+  </div>
+  <div id="801" style="margin-top:5px">
+    <a href="?r=801" class="link">801-820</a>&nbsp;
+    <a href="?r=821" class="link">821-840</a>&nbsp;
+    <a href="?r=841" class="link">841-860</a>&nbsp;
+    <a href="?r=861" class="link">861-880</a>&nbsp;
+    <a href="?r=881" class="link">881-900</a>
+  </div>
+</div>
+
+<div id="before" style="margin-top:5px; display:none">
+</div>
+
+<div id="contents" style="margin-top:5px; display:none">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    execute();
+});
+
+$(window).on('popstate', function(e) {
+    execute();
+});
+
+$(document).on('click', '.link', function(e) {
+    var href = $(this).attr('href');
+
+    if ($(this).parents('#num-list').attr('id') == 'num-list'){
+        var b = location.search.match(/b=(.*?)(&|$)/);
+        var href_b = href.match(/b=(.*?)(&|$)/);
+        b = b ? b[1] : 0;
+        href_b = href_b ? href_b[1] : 0;
+        b = b.toString().search(/^[0-9]+$/) == 0 ? b : 0;
+
+        if (b && !href_b) {
+            href = href + '&b=1';
+        }
+    }
+
+    e.preventDefault();
+    history.pushState('', '', href);
+    execute();
+});
+
+function execute() {
+    init();
+    createLink();
+    createContents();
+}
+
+function init() {
+    $('#num-list b').each(function(i, elem) {
+        num = $(elem).text().match(/^(\d+?)-\d+$/);
+        $(elem).replaceWith('<a href="?r=' + num[1] + '" class="link">' + $(elem).text() + '</a>');
+    });
+
+    $('#before').empty();
+    $('#before').hide();
+
+    $('#contents').empty();
+    $('#contents').hide();
+}
+
+function createLink() {
+    var r = location.search.match(/r=(.*?)(&|$)/);
+    var b = location.search.match(/b=(.*?)(&|$)/);
+    r = r ? r[1] : 0;
+    b = b ? b[1] : 0;
+    r = r.toString().search(/^[0-9]+$/) == 0 ? r : 0;
+    b = b.toString().search(/^[0-9]+$/) == 0 ? b : 0;
+
+    if (r >= 781 && r <= 881) {
+        $('#before').show();
+        $('#before').append('直前:&nbsp;\n');
+        $('#before').append('<a href="?r=' + r + '" class="link">表示しない</a>&nbsp;\n');
+        $('#before').append('<a href="?r=' + r + '&b=1" class="link">表示する</a>\n');
+    }
+
+    $('#num-list a').each(function(i, elem) {
+        if ($(elem).attr('href') == '?r=' + r) {
+            $(elem).replaceWith('<b>' + $(elem).text() + '</b>');
+        }
+    });
+
+    $('#before a').each(function(i, elem) {
+        var query = b ? '?r=' + r + '&b=' + b: '?r=' + r;
+        if ($(elem).attr('href') == query) {
+            $(elem).replaceWith('<b>' + $(elem).text() + '</b>');
+       }
+    });
+}
+
+function createContents() {
+    var r = location.search.match(/r=(.*?)(&|$)/);
+    var b = location.search.match(/b=(.*?)(&|$)/);
+    r = r ? r[1] : 0;
+    b = b ? b[1] : 0;
+    r = r.toString().search(/^[0-9]+$/) == 0 ? r : 0;
+    b = b.toString().search(/^[0-9]+$/) == 0 ? b : 0;
+
+    if (r >= 593 && r <= 881) {
+        var ignore_list_before = {
+            780: true,
+            781: true,
+            783: true,
+            813: true,
+        };
+        var ignore_list = {
+            602: true,
+            603: true,
+            604: true,
+            609: true,
+            611: true,
+            613: true,
+            641: true,
+            713: true,
+            814: true,
+        };
+
+        $('#contents').show();
+        $('#contents').append('<hr />');
+        end = (r == 593) ? 600 : parseInt(r) + 19;
+        for (i = r; i <= end; i++) {
+            if (i >= 781 && b) {
+                num = i - 1;
+                if (ignore_list_before[num]) {
+                    $('#contents').append('<div style="width:284px; height:50px; display:flex; align-items:center; display:-webkit-flex; -webkit-align-items:center">ランク' + i + 'の直前は撮り逃したためデータなし</div>');
+                } else {
+                    $('#contents').append('<div style="width:284px; height:161px; display:flex; align-items:center; justify-content:center; display:-webkit-flex; -webkit-align-items:center; -webkit-content:center"><img width="284px" height="160px" data-src="img/' + num + 'e.png" /></div>');
+                }
+            }
+            if (ignore_list[i]) {
+                $('#contents').append('<div style="width:284px; height:50px; display:flex; align-items:center; display:-webkit-flex; -webkit-align-items:center">ランク' + i + 'は撮り逃したためデータなし</div>');
+            } else {
+                $('#contents').append('<div style="width:284px; height:161px; display:flex; align-items:center; justify-content:center; display:-webkit-flex; -webkit-align-items:center; -webkit-content:center"><img width="284px" height="160px" data-src="img/' + i + '.png" /></div>');
+            }
+        }
+        $('img').each(function() {
+            Tada.add(this);
+        });
+    }
+}
+
+Tada.setup({
+    delay: 0
+});
+</script>
+
+</body>
+</html>
